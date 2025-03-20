@@ -54,7 +54,7 @@ const LoginPage = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className={`input input-bordered w-full pl-10`}
+                                    className={`input input-bordered w-full pl-10 text-base`}
                                     placeholder="John"
                                     value={formData.username}
                                     onChange={(e) =>
@@ -79,7 +79,7 @@ const LoginPage = () => {
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className={`input input-bordered w-full pl-10`}
+                                    className={`input input-bordered w-full pl-10 text-base`}
                                     placeholder="••••••••"
                                     value={formData.password}
                                     onChange={(e) =>
