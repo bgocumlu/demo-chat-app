@@ -6,9 +6,10 @@ interface ThemeState {
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-    theme: localStorage.getItem("chat-theme") || "sunset",
+    theme: localStorage.getItem("chat-theme") || "corporate",
     setTheme: (theme: string) => {
         localStorage.setItem("chat-theme", theme);
         set({ theme });
+        document.documentElement.setAttribute("data-theme", theme);
     },
 }));

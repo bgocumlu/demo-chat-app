@@ -13,17 +13,21 @@ import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 
 function App() {
-    const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
+    const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
     const { theme } = useThemeStore();
 
-    console.log({ onlineUsers });
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+    }, [theme]);
+
+    // console.log({ onlineUsers });
 
     useEffect(() => {
         checkAuth();
     }, [checkAuth]);
 
-    console.log({ authUser });
+    // console.log({ authUser });
 
     if (isCheckingAuth && !authUser) {
         return (
@@ -34,7 +38,7 @@ function App() {
     }
 
     return (
-        <div className="" data-theme={theme}>
+        <div className="">
             <Navbar></Navbar>
 
             <Routes>

@@ -2,14 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
-        email: {
+        username: {
             type: String,
             required: true,
             unique: true,
-        },
-        fullName: {
-            type: String,
-            required: true,
         },
         password: {
             type: String,
@@ -19,6 +15,19 @@ const userSchema = new mongoose.Schema(
         profilePic: {
             type: String,
             default: "",
+        },
+        isGuest: {
+            type: Boolean,
+            default: false,
+        },
+        expiresAt: {
+            type: Date,
+            default: function () {
+                return this.isGuest
+                    ? new Date(Date.now() + 1 * 60 * 60 * 1000) // 1 hour
+                    : undefined; 
+            },
+            expires: 0,
         },
     },
     { timestamps: true }

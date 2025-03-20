@@ -2,17 +2,20 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, MessageSquare, User } from "lucide-react";
+import { generateGuestUsername } from "@/lib/utils"; 
 
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
-        email: "",
+        username: "",
         password: "",
+        isGuest: false,
     });
     const { login, isLoggingIn } = useAuthStore();
+    const { signup, isSigningUp } = useAuthStore();
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
         login(formData);
     };
@@ -45,24 +48,24 @@ const LoginPage = () => {
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text font-medium">
-                                    Email
+                                    Username
                                 </span>
                             </label>
                             <div className="relative">
                                 <input
-                                    type="email"
+                                    type="text"
                                     className={`input input-bordered w-full pl-10`}
-                                    placeholder="you@example.com"
-                                    value={formData.email}
+                                    placeholder="John"
+                                    value={formData.username}
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            email: e.target.value,
+                                            username: e.target.value,
                                         })
                                     }
                                 />
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-base-content/40" />
+                                    <User className="h-5 w-5 text-base-content/40" />
                                 </div>
                             </div>
                         </div>
@@ -117,6 +120,28 @@ const LoginPage = () => {
                                 </>
                             ) : (
                                 "Sign in"
+                            )}
+                        </button>
+
+                        <button
+                            type="button"
+                            className="btn btn-secondary w-full"
+                            disabled={isSigningUp}
+                            onClick={() => {
+                                signup({
+                                    username: generateGuestUsername(),
+                                    password: "guestinho",
+                                    isGuest: true,
+                                });
+                            }}
+                        >
+                            {isSigningUp ? (
+                                <>
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    Loading...
+                                </>
+                            ) : (
+                                "Continue as Guest"
                             )}
                         </button>
                     </form>

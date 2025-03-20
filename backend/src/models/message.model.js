@@ -18,6 +18,19 @@ const messageSchema = new mongoose.Schema(
         image: {
             type: String,
         },
+        isVolatile: {
+            type: Boolean,
+            default: false,
+        },
+        expiresAt: {
+            type: Date,
+            default: function () {
+                return this.isVolatile
+                    ? new Date(Date.now() + 1.5 * 60 * 60 * 1000) // 1.5 hour
+                    : undefined;
+            },
+            expires: 0,
+        },
     },
     { timestamps: true }
 );

@@ -49,11 +49,19 @@ export const sendMessage = async (req, res) => {
             imageUrl = uploadResponse.secure_url;
         }
 
+        const isRecieverGuest = await User.findById(recieverId).then(
+            (user) => user.isGuest
+        );
+        const isSenderGuest = await User.findById(senderId).then(
+            (user) => user.isGuest
+        );
+
         const newMessage = new Message({
             senderId,
             recieverId: recieverId,
             text,
             image: imageUrl,
+            isVolatile: isRecieverGuest || isSenderGuest,
         });
 
         await newMessage.save();

@@ -12,6 +12,20 @@ const ChatContainer = () => {
     const { authUser } = useAuthStore();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
 
+    // TODO: Implement message editing, deleting
+    interface TestEvent extends React.MouseEvent<HTMLDivElement> {
+        target: EventTarget & {
+            dataset: {
+                key?: string;
+            };
+        };
+    }
+
+    function test(event: TestEvent): void {
+        console.log(event.target.dataset.key);
+    }
+    // 
+
     useEffect(() => {
         if (selectedUser?._id) {
             fetchMessages(selectedUser._id);
@@ -47,12 +61,14 @@ const ChatContainer = () => {
                 {messages.map((message) => (
                     <div
                         key={message._id}
+                        data-key={message._id}
                         className={`chat ${
                             message.senderId === authUser?._id
                                 ? "chat-end"
                                 : "chat-start"
                         }`}
                         ref={messageEndRef}
+                        onClick={test}
                     >
                         <div className=" chat-image avatar">
                             <div className="size-10 rounded-full border">

@@ -2,16 +2,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "./useAuthStore";
-
-interface User {
-    _id: string;
-    email: string;
-    fullName: string;
-    name: string;
-    password: string;
-    profilePic: string;
-    createdAt: string;
-}
+import User from "./User";
 
 interface Message {
     _id?: string;

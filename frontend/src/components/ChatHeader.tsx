@@ -15,7 +15,7 @@ const ChatHeader = () => {
                         <div className="size-10 rounded-full relative">
                             <img
                                 src={selectedUser?.profilePic || "/avatar.png"}
-                                alt={selectedUser?.fullName}
+                                alt={selectedUser?.username}
                             />
                         </div>
                     </div>
@@ -23,7 +23,7 @@ const ChatHeader = () => {
                     {/* User info */}
                     <div>
                         <h3 className="font-medium">
-                            {selectedUser?.fullName}
+                            {selectedUser?.username}
                         </h3>
                         <p className="text-sm text-base-content/70">
                             {selectedUser?._id && onlineUsers.includes(selectedUser._id)
