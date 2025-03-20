@@ -83,7 +83,7 @@ const MessageInput = () => {
                 <div className="flex-1 flex gap-2">
                     <input
                         type="text"
-                        className="w-full input input-bordered rounded-lg input-sm sm:input-md text-base"
+                        className="w-full input input-bordered rounded-lg input-sm sm:input-md text-base focus:outline-none focus:border-primary"
                         placeholder="Type a message..."
                         value={text}
                         onChange={(e) => setText(e.target.value)}
