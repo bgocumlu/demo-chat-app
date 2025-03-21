@@ -59,6 +59,15 @@ export const sendMessage = async (req, res) => {
             const { text, image } = req.body;
             const { id: recieverId } = req.params;
             const senderId = req.user._id;
+
+            const reciever = await User.findById(recieverId);
+            const sender = await User.findById(senderId);
+
+            if (!reciever || !sender) {
+                console.log(error);
+                res.status(500).json({ message: "Internal server error" });
+                return;
+            }
             
             let imageUrl;
 
@@ -70,19 +79,12 @@ export const sendMessage = async (req, res) => {
                 imageUrl = uploadResponse.secure_url;
             }
 
-            const isRecieverGuest = await User.findById(recieverId).then(
-                (user) => user.isGuest
-            );
-            const isSenderGuest = await User.findById(senderId).then(
-                (user) => user.isGuest
-            );
-
             const newMessage = new Message({
                 senderId,
                 recieverId: recieverId,
                 text,
                 image: imageUrl,
-                isVolatile: isRecieverGuest || isSenderGuest,
+                isVolatile: reciever.isGuest || sender.isGuest,
             });
 
             await newMessage.save();

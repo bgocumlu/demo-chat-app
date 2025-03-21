@@ -1,10 +1,29 @@
 import { useAuthStore } from "@/store/useAuthStore";
 import { useChatStore } from "@/store/useChatStore";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
-const ChatHeader = () => {
+interface Scroll {
+    autoScroll: boolean;
+    setAutoScroll: (autoScroll: boolean) => void;
+}
+
+const ChatHeader = ({ autoScroll, setAutoScroll }: Scroll) => {
     const { selectedUser, setSelectedUser } = useChatStore();
     const { onlineUsers } = useAuthStore();
+
+    function handleAutoScrollToggle() {
+        setAutoScroll(!autoScroll);
+        if (!autoScroll) {
+            toast.success(`Auto Scroll On`, {
+                duration: 1000,
+            });
+        } else {
+            toast.error(`Auto Scroll Off`, {
+                duration: 1000,
+            });
+        }
+    }
 
     return (
         <div className="p-2.5 border-b border-base-300">
@@ -26,17 +45,26 @@ const ChatHeader = () => {
                             {selectedUser?.username}
                         </h3>
                         <p className="text-sm text-base-content/70">
-                            {selectedUser?._id && onlineUsers.includes(selectedUser._id)
+                            {selectedUser?._id &&
+                            onlineUsers.includes(selectedUser._id)
                                 ? "Online"
                                 : "Offline"}
                         </p>
                     </div>
                 </div>
+                <div className="flex flex-row">
+                    <input
+                        type="checkbox"
+                        checked={autoScroll}
+                        onClick={handleAutoScrollToggle}
+                        className="toggle toggle-xs toggle-neutral mt-1 mr-3"
+                    />
 
-                {/* Close button */}
-                <button onClick={() => setSelectedUser(null)}>
-                    <X />
-                </button>
+                    {/* Close button */}
+                    <button onClick={() => setSelectedUser(null)}>
+                        <X />
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { useChatStore } from "@/store/useChatStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
@@ -17,6 +17,7 @@ const ChatContainer = () => {
     } = useChatStore();
     const { authUser } = useAuthStore();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
+    const [autoScroll, setAutoScroll] = useState(true);
 
     // TODO: Implement message editing, deleting
     // interface TestEvent extends React.MouseEvent<HTMLDivElement> {
@@ -31,6 +32,22 @@ const ChatContainer = () => {
     //     console.log(event.target.dataset.key);
     // }
     //
+
+    interface ImageLoadEvent extends React.SyntheticEvent<HTMLImageElement> {
+        target: EventTarget & {
+            dataset: {
+                key?: number;
+            };
+        };
+    }
+
+    function handleImageLoad(event: ImageLoadEvent) {
+        if (event.target.dataset.key == messages.length - 1) {
+            if (autoScroll && messageEndRef.current && messages) {
+                messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }
 
     useEffect(() => {
         if (selectedUser?._id) {
@@ -48,15 +65,18 @@ const ChatContainer = () => {
     ]);
 
     useEffect(() => {
-        if (messageEndRef.current && messages) {
+        if (autoScroll && messageEndRef.current && messages) {
             messageEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [messages]);
+    }, [messages, autoScroll]);
 
     if (isMessagesLoading) {
         return (
             <div className="flex-1 flex flex-col overflow-auto">
-                <ChatHeader />
+                <ChatHeader
+                    autoScroll={autoScroll}
+                    setAutoScroll={setAutoScroll}
+                />
                 <MessageSkeleton />
                 <MessageInput />
             </div>
@@ -65,11 +85,11 @@ const ChatContainer = () => {
 
     return (
         <div className="flex-1 flex flex-col overflow-auto">
-            <ChatHeader />
+            <ChatHeader autoScroll={autoScroll} setAutoScroll={setAutoScroll} />
 
             <div className="flex-grow overflow-y-auto p-4 space-y-4 ">
                 <div className="flex flex-col min-h-full justify-end">
-                    {messages.map((message) => (
+                    {messages.map((message, index) => (
                         <div
                             key={message._id}
                             data-key={message._id}
@@ -106,6 +126,8 @@ const ChatContainer = () => {
                                         src={message.image}
                                         alt="Attachment"
                                         className="sm:max-w-[200px] rounded-md mb-2"
+                                        data-key={index}
+                                        onLoad={handleImageLoad}
                                     />
                                 )}
                                 {message.text && <p>{message.text}</p>}
