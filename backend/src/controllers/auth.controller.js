@@ -20,7 +20,7 @@ export const signup = async (req, res) => {
                 .status(400)
                 .json({ message: "Password must be at least 6 characters" });
         }
-        if (username.startsWith("Guest_")) {
+        if (!isGuest && username.startsWith("Guest_")) {
             return res.status(400).json({
                 message:
                     "Username can not start with Guest_",
