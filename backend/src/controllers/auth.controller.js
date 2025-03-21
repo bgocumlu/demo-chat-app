@@ -20,9 +20,16 @@ export const signup = async (req, res) => {
                 .status(400)
                 .json({ message: "Password must be at least 6 characters" });
         }
+        if (username.startsWith("Guest_")) {
+            return res.status(400).json({
+                message:
+                    "Username cannot start with Guest_",
+            });
+        }
         if (!isValidUsername(username)) {
             return res.status(400).json({
-                message: "Username can only contain letters, numbers, hyphens, and underscores",
+                message:
+                    "Username can only contain letters, numbers, hyphens, and underscores",
             });
         }
 
@@ -31,7 +38,9 @@ export const signup = async (req, res) => {
             if (user.isGuest) {
                 return res
                     .status(400)
-                    .json({ message: "Error creating guest account. Try again" });
+                    .json({
+                        message: "Error creating guest account. Try again",
+                    });
             }
             return res.status(400).json({ message: "Username already exists" });
         }
