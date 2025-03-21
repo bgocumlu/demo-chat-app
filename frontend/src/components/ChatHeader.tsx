@@ -56,7 +56,7 @@ const ChatHeader = ({ autoScroll, setAutoScroll }: Scroll) => {
                     <input
                         type="checkbox"
                         checked={autoScroll}
-                        className="toggle toggle-xs toggle-neutral mt-1 mr-3"
+                        className="toggle toggle-xs mt-1 mr-3"
                         onChange={handleAutoScrollToggle}
                     />
 
