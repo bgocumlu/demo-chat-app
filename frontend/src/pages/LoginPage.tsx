@@ -133,7 +133,7 @@ const LoginPage = () => {
                                     username: randomName,
                                     password: "guestinho",
                                     isGuest: true,
-                                    profilePic: `https://api.dicebear.com/9.x/micah/svg?seed=${randomName}`,
+                                    profilePic: `https://api.dicebear.com/9.x/lorelei/svg?seed=${randomName}&mouth=happy01,happy05,happy06,happy14,happy17`,
                                 });
                             }}
                         >
