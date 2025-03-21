@@ -23,7 +23,7 @@
         const renderAppUrl = "https://demo-chat-app-866t.onrender.com/";
         
         function checkRenderAppStatus() {
-            fetch(renderAppUrl)
+            fetch(renderAppUrl, { mode: 'no-cors' })
                 .then(() => {
                     // Redirect to the Render app if it's awake
                     window.location.href = renderAppUrl;
