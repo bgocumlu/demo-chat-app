@@ -23,7 +23,7 @@ export const signup = async (req, res) => {
         if (username.startsWith("Guest_")) {
             return res.status(400).json({
                 message:
-                    "Username cannot start with Guest_",
+                    "Username can not start with Guest_",
             });
         }
         if (!isValidUsername(username)) {
