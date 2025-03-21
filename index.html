@@ -8,17 +8,75 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px; /* Control the size */
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem; /* Bigger font size */
+            font-weight: 600;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            background-color: #5c5cff; /* Modern blue */
+            border-radius: 50%;
+            animation: bounce 0.8s infinite cubic-bezier(0.6, 0.05, 0.28, 0.91);
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.1s; }
+        .dot:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
-    <div>
+    <div class="container">
         <h1>App is Waking Up... ⏳</h1>
+        <div class="loading">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
         <p>Please wait, you will be redirected shortly.</p>
         <a href="https://demo-chat-app-866t.onrender.com/">https://demo-chat-app-866t.onrender.com/</a>
     </div>
+
     <script>
         const renderAppUrl = "https://demo-chat-app-866t.onrender.com/";
         
