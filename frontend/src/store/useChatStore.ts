@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "./useAuthStore";
 import User from "./User";
+import { AxiosError } from "axios";
 
 interface Message {
     _id?: string;
@@ -66,14 +67,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     sendMessage: async (messageData) => {
         const { selectedUser, messages } = get();
         try {
+            const formData = new FormData();
+            formData.append("text", messageData.text);
+
+            if (messageData.image) {
+                formData.append("image", messageData.image);
+            }
+
             const response = await axiosInstance.post(
                 `/messages/send/${selectedUser?._id}`,
-                messageData
+                formData
             );
+            
+            console.log(response.data);
+
             set({ messages: [...messages, response.data] });
         } catch (error) {
-            console.log(error);
-            toast.error("Failed to send message");
+            const e = error as AxiosError;
+            console.log(e.response?.statusText);
+            toast.error(e.response?.statusText ?? "Failed to send message");
         }
     },
 
@@ -82,8 +94,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         if (!selectedUser) return;
 
         const socket = useAuthStore.getState().socket;
-
-
 
         socket?.on("newMessage", (newMessage: Message) => {
             if (newMessage.senderId !== selectedUser._id) return;

@@ -1,4 +1,5 @@
 import { useChatStore } from "@/store/useChatStore";
+import { AxiosError } from "axios";
 import { Image, Send, X } from "lucide-react";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -13,7 +14,7 @@ const MessageInput = () => {
         target: HTMLInputElement & { files: FileList };
     }
 
-    const handleImageChange = (e: ImageChangeEvent) => {
+    const handleImageChange = async (e: ImageChangeEvent) => {
         const file = e.target.files[0];
 
         if (!file.type.startsWith("image/")) {
@@ -21,19 +22,23 @@ const MessageInput = () => {
             return;
         }
 
+        console.log("Image file size:", file.size);
+
         const reader = new FileReader();
         reader.onloadend = () => {
             setImagePreview(reader.result as string);
         };
         reader.readAsDataURL(file);
     };
+
     const removeImage = () => {
         setImagePreview(null);
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
     };
-    const handleSendMessage = async (e: { preventDefault: () => void; }) => {
+    
+    const handleSendMessage = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
         if (!text.trim() && !imagePreview) {
@@ -49,8 +54,9 @@ const MessageInput = () => {
                 fileInputRef.current.value = "";
             }
         } catch (error) {
-            console.log(error);
-            toast.error("Failed to send message");
+            const e = error as AxiosError;
+            console.log(e.response?.statusText);
+            toast.error(e.response?.statusText ?? "Failed to send message");
         }
     };
 
