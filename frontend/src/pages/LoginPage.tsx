@@ -19,7 +19,7 @@ const LoginPage = () => {
         e.preventDefault();
         login({
             ...formData,
-            username: formData.username.trim(),
+            username: formData.username.toLowerCase().trim(),
         });
     };
 
@@ -57,8 +57,9 @@ const LoginPage = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className={`input input-bordered w-full pl-10 text-base`}
+                                    className={`input input-bordered w-full pl-10 text-base focus:outline-none focus:border-primary`}
                                     placeholder="John"
+                                    minLength={1}
                                     value={formData.username}
                                     onChange={(e) =>
                                         setFormData({
@@ -82,7 +83,7 @@ const LoginPage = () => {
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className={`input input-bordered w-full pl-10 text-base`}
+                                    className={`input input-bordered w-full pl-10 text-base focus:outline-none focus:border-primary`}
                                     placeholder="••••••••"
                                     value={formData.password}
                                     onChange={(e) =>

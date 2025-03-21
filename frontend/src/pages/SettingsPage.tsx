@@ -28,11 +28,11 @@ const SettingsPage = () => {
                     {THEMES.map((t) => (
                         <button
                             key={t}
-                            className={`group flex flex-col items-center gap-1.5 p-2 rounded-lg transition-colors${
+                            className={`group flex flex-col items-center gap-1.5 p-2 rounded-lg transition-colors ${
                                 theme === t
                                     ? "bg-base-200"
                                     : "hover:bg-base-200/50"
-                            }`}
+                            } cursor-pointer`}
                             onClick={() => setTheme(t)}
                         >
                             <div
@@ -89,27 +89,21 @@ const SettingsPage = () => {
                                             }`}
                                         >
                                             <div
-                                                className={`
-                          max-w-[80%] rounded-xl p-3 shadow-sm
-                          ${
-                              message.isSent
-                                  ? "bg-primary text-primary-content"
-                                  : "bg-base-200"
-                          }
-                        `}
+                                                className={`max-w-[80%] rounded-xl p-3 shadow-sm ${
+                                                    message.isSent
+                                                        ? "bg-primary text-primary-content"
+                                                        : "bg-base-200"
+                                                }`}
                                             >
                                                 <p className="text-sm">
                                                     {message.content}
                                                 </p>
                                                 <p
-                                                    className={`
-                            text-[10px] mt-1.5
-                            ${
-                                message.isSent
-                                    ? "text-primary-content/70"
-                                    : "text-base-content/70"
-                            }
-                          `}
+                                                    className={`text-[10px] mt-1.5${
+                                                        message.isSent
+                                                            ? "text-primary-content/70"
+                                                            : "text-base-content/70"
+                                                    }`}
                                                 >
                                                     12:00 PM
                                                 </p>

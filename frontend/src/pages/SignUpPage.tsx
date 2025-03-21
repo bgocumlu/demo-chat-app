@@ -34,7 +34,7 @@ const SignUpPage = () => {
         if (success === true) {
             signup({
                 ...formData,
-                username: formData.username.trim(),
+                username: formData.username.toLowerCase().trim(),
                 profilePic: `https://api.dicebear.com/9.x/adventurer/svg?seed=${formData.username}`,
             });
         }
@@ -73,7 +73,12 @@ const SignUpPage = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className={`input input-bordered w-full pl-10 text-base`}
+                                    className={`input input-bordered w-full pl-10 text-base focus:outline-none focus:border-primary validator`}
+                                    minLength={1}
+                                    maxLength={20}
+                                    required
+                                    pattern="^[a-zA-Z0-9-_]+$"
+                                    title="Username can only contain letters, numbers, underscores, and hyphens. No spaces are allowed. Maximum length is 20 characters."
                                     placeholder="John"
                                     value={formData.username}
                                     onChange={(e) =>
@@ -99,7 +104,8 @@ const SignUpPage = () => {
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className={`input input-bordered w-full pl-10 text-base`}
+                                    className={`input input-bordered w-full pl-10 text-base focus:outline-none focus:border-primary`}
+                                    required
                                     placeholder="••••••••"
                                     value={formData.password}
                                     onChange={(e) =>
