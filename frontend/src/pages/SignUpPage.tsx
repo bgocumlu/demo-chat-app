@@ -79,7 +79,7 @@ const SignUpPage = () => {
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            username: e.target.value,
+                                            username: e.target.value.trim(),
                                         })
                                     }
                                 />

@@ -12,6 +12,8 @@ import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 
+// TODO: çıkış confirm ekranı, hesap silme, mesaj silme/düzenleme,
+
 function App() {
     const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
