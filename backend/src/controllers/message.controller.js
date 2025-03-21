@@ -4,12 +4,15 @@ import User from "../models/user.model.js";
 import { io, getReceiverSocketId } from "../lib/socket.js";
 import multer from "multer";
 
-const storage = multer.memoryStorage();
-
 const upload = multer({
-    storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, 
-}).single("image");
+    limits: {
+        fileSize: 10 * 1024 * 1024,
+        fieldSize: 10 * 1024 * 1024, 
+    }, // 10MB max file size
+}).fields([
+    { name: "text", maxCount: 1 }, 
+    { name: "image", maxCount: 1 },
+]);
 
 export const getUsersForSidebar = async (req, res) => {
     try {
@@ -49,14 +52,14 @@ export const sendMessage = async (req, res) => {
         upload(req, res, async (err) => {
             if (err) {
                 return res
-                    .status(400)
-                    .json({ error: "File upload failed: " + err.message });
+                .status(400)
+                .json({ error: "File upload failed: " + err.message });
             }
-
+            
             const { text, image } = req.body;
             const { id: recieverId } = req.params;
             const senderId = req.user._id;
-
+            
             let imageUrl;
 
             if (image) {
@@ -93,7 +96,6 @@ export const sendMessage = async (req, res) => {
             res.status(201).json(newMessage);
             return;
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });

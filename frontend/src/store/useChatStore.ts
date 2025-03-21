@@ -20,6 +20,7 @@ interface ChatStore {
     selectedUser?: User | null;
     isUsersLoading: boolean;
     isMessagesLoading: boolean;
+    isImageLoading: boolean;
 
     fetchUsers: () => Promise<void>;
     fetchMessages: (userId: string) => Promise<void>;
@@ -27,6 +28,7 @@ interface ChatStore {
     subscribeToMessages: () => void;
     unsubscribeFromMessages: () => void;
     setSelectedUser: (selectedUser: User | null) => void;
+    setImageLoading: (isImageLoading: boolean) => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -35,6 +37,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     selectedUser: null,
     isUsersLoading: false,
     isMessagesLoading: false,
+    isImageLoading: false,
 
     fetchUsers: async () => {
         set({ isUsersLoading: true });
@@ -72,20 +75,21 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
             if (messageData.image) {
                 formData.append("image", messageData.image);
+                set({ isImageLoading: true });
             }
 
             const response = await axiosInstance.post(
                 `/messages/send/${selectedUser?._id}`,
                 formData
             );
-            
-            console.log(response.data);
 
             set({ messages: [...messages, response.data] });
         } catch (error) {
             const e = error as AxiosError;
             console.log(e.response?.statusText);
             toast.error(e.response?.statusText ?? "Failed to send message");
+        } finally {
+            set({ isImageLoading: false });
         }
     },
 
@@ -109,5 +113,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     setSelectedUser: (selectedUser) => {
         set({ selectedUser });
+    },
+
+    setImageLoading: (isImageLoading) => {
+        set({ isImageLoading: isImageLoading });
     },
 }));

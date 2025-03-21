@@ -19,17 +19,17 @@ const ChatContainer = () => {
     const messageEndRef = useRef<HTMLDivElement | null>(null);
 
     // TODO: Implement message editing, deleting
-    interface TestEvent extends React.MouseEvent<HTMLDivElement> {
-        target: EventTarget & {
-            dataset: {
-                key?: string;
-            };
-        };
-    }
+    // interface TestEvent extends React.MouseEvent<HTMLDivElement> {
+    //     target: EventTarget & {
+    //         dataset: {
+    //             key?: string;
+    //         };
+    //     };
+    // }
 
-    function test(event: TestEvent): void {
-        console.log(event.target.dataset.key);
-    }
+    // function test(event: TestEvent): void {
+    //     console.log(event.target.dataset.key);
+    // }
     //
 
     useEffect(() => {
@@ -79,7 +79,7 @@ const ChatContainer = () => {
                                     : "chat-start"
                             }`}
                             ref={messageEndRef}
-                            onClick={test}
+                            // onClick={test}
                         >
                             <div className=" chat-image avatar">
                                 <div className="size-10 rounded-full border">

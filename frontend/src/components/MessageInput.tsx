@@ -1,6 +1,6 @@
 import { useChatStore } from "@/store/useChatStore";
 import { AxiosError } from "axios";
-import { Image, Send, X } from "lucide-react";
+import { Image, LoaderPinwheel, Send, X } from "lucide-react";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -8,7 +8,7 @@ const MessageInput = () => {
     const [text, setText] = useState("");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const { sendMessage } = useChatStore();
+    const { sendMessage, isImageLoading } = useChatStore();
 
     interface ImageChangeEvent extends React.ChangeEvent<HTMLInputElement> {
         target: HTMLInputElement & { files: FileList };
@@ -37,7 +37,7 @@ const MessageInput = () => {
             fileInputRef.current.value = "";
         }
     };
-    
+
     const handleSendMessage = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
@@ -79,6 +79,12 @@ const MessageInput = () => {
                             <X className="size-3" />
                         </button>
                     </div>
+
+                    {isImageLoading && (
+                        <div className="flex items-center justify-center">
+                            <LoaderPinwheel className="size-md animate-spin"></LoaderPinwheel>
+                        </div>
+                    )}
                 </div>
             )}
 
