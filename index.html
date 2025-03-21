@@ -26,7 +26,7 @@
             fetch(renderAppUrl, { mode: 'no-cors' })
                 .then(() => {
                     // Redirect to the Render app if it's awake
-                    // window.location.href = renderAppUrl;
+                    window.location.href = renderAppUrl;
                 })
                 .catch(() => {
                     // If the app is still sleeping, check again after 7.5 seconds
