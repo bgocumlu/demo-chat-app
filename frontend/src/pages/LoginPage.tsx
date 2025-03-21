@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, MessageSquare, User } from "lucide-react";
-import { generateGuestUsername } from "@/lib/utils"; 
+import { generateGuestUsername } from "@/lib/utils";
 
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -128,10 +128,12 @@ const LoginPage = () => {
                             className="btn btn-secondary w-full"
                             disabled={isSigningUp}
                             onClick={() => {
+                                const randomName = generateGuestUsername();
                                 signup({
-                                    username: generateGuestUsername(),
+                                    username: randomName,
                                     password: "guestinho",
                                     isGuest: true,
+                                    profilePic: `https://api.dicebear.com/9.x/lorelei/svg?seed=${randomName}`,
                                 });
                             }}
                         >
