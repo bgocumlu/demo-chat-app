@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Waking Up App...</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>App is Waking Up... ⏳</h1>
+        <p>Please wait, you will be redirected shortly.</p>
+        <a href="https://demo-chat-app-866t.onrender.com/">https://demo-chat-app-866t.onrender.com/</a>
+    </div>
+    <script>
+        const renderAppUrl = "https://demo-chat-app-866t.onrender.com/";
+        
+        function checkRenderAppStatus() {
+            fetch(renderAppUrl, { mode: 'no-cors' })
+                .then(() => {
+                    // Redirect to the Render app if it's awake
+                    // window.location.href = renderAppUrl;
+                })
+                .catch(() => {
+                    // If the app is still sleeping, check again after 7.5 seconds
+                    setTimeout(checkRenderAppStatus, 7500);
+                });
+        }
+
+        // Start checking the Render app status
+        checkRenderAppStatus();
+    </script>
+</body>
+</html>
