@@ -1,13 +1,6 @@
 import AuthImagePattern from "@/components/AuthImagePattern";
 import { useAuthStore } from "@/store/useAuthStore";
-import {
-    Eye,
-    EyeOff,
-    Loader2,
-    Lock,
-    MessageSquare,
-    User,
-} from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, MessageSquare, User } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -24,20 +17,27 @@ const SignUpPage = () => {
     const { signup, isSigningUp } = useAuthStore();
 
     const validateForm = () => {
-        if (!formData.username.trim()) return toast.error("Username is required");
-        if (!formData.password.trim()) return toast.error("Password is required");
-        if (formData.password.length < 6) return toast.error("Password must be at least 6 characters long");
+        if (!formData.username.trim())
+            return toast.error("Username is required");
+        if (!formData.password.trim())
+            return toast.error("Password is required");
+        if (formData.password.length < 6)
+            return toast.error("Password must be at least 6 characters long");
 
         return true;
     };
 
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
+    const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
         const success = validateForm();
         if (success === true) {
-            signup({...formData, profilePic: `https://api.dicebear.com/9.x/adventurer/svg?seed=${formData.username}`});
-        };
+            signup({
+                ...formData,
+                username: formData.username.trim(),
+                profilePic: `https://api.dicebear.com/9.x/adventurer/svg?seed=${formData.username}`,
+            });
+        }
     };
 
     return (
@@ -79,7 +79,7 @@ const SignUpPage = () => {
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            username: e.target.value.trim(),
+                                            username: e.target.value,
                                         })
                                     }
                                 />

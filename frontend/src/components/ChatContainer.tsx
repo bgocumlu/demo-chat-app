@@ -5,6 +5,7 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "@/store/useAuthStore";
 import { formatMessageTime } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
 
 const ChatContainer = () => {
     const {
@@ -136,7 +137,11 @@ const ChatContainer = () => {
                                         onLoad={handleImageLoad}
                                     />
                                 )}
-                                {message.text && <p>{message.text}</p>}
+                                {message.text && (
+                                    <ReactMarkdown key={message._id}>
+                                        {message.text}
+                                    </ReactMarkdown>
+                                )}
                             </div>
                         </div>
                     ))}

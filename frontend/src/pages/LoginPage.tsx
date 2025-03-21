@@ -17,7 +17,10 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
-        login(formData);
+        login({
+            ...formData,
+            username: formData.username.trim(),
+        });
     };
 
     return (
@@ -60,7 +63,7 @@ const LoginPage = () => {
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            username: e.target.value.trim(),
+                                            username: e.target.value,
                                         })
                                     }
                                 />
