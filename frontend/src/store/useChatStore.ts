@@ -30,7 +30,6 @@ interface ChatStore {
     unsubscribeFromMessages: () => void;
     setSelectedUser: (selectedUser: User | null) => void;
     setImageLoading: (isImageLoading: boolean) => void;
-    sortUsers: () => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -46,15 +45,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
         try {
             const response = await axiosInstance.get("messages/users");
-            set({ users: response.data });
+            const sortedUsers = response.data.sort((a: User, b: User) => {
+                const isALowercase: boolean =
+                    a.username[0] === a.username[0].toLowerCase();
+                const isBLowercase: boolean =
+                    b.username[0] === b.username[0].toLowerCase();
+
+                if (isALowercase && !isBLowercase) return -1;
+                if (!isALowercase && isBLowercase) return 1;
+
+                if (a.username < b.username) return -1;
+                if (a.username > b.username) return 1;
+
+                return 0;
+            });
+
+            set({ users: sortedUsers });
         } catch (error) {
             console.log(error);
             toast.error("Failed to fetch users");
         } finally {
             set({ isUsersLoading: false });
         }
-
-        get().sortUsers();
     },
 
     fetchMessages: async (userId: string) => {
@@ -151,15 +163,5 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     setImageLoading: (isImageLoading) => {
         set({ isImageLoading: isImageLoading });
-    },
-
-    sortUsers: () => {
-        set((state) => ({
-            users: state.users.sort((a, b) => {
-                if (a.username < b.username) return -1;
-                if (a.username > b.username) return 1;
-                return 0;
-            }),
-        }));
     },
 }));
