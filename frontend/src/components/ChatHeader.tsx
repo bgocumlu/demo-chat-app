@@ -1,14 +1,21 @@
 import { useAuthStore } from "@/store/useAuthStore";
 import { useChatStore } from "@/store/useChatStore";
-import { X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
 
-interface Scroll {
+interface ChatHeaderProps {
     autoScroll: boolean;
     setAutoScroll: (autoScroll: boolean) => void;
+    isSidebarOpen: boolean;
+    setIsSidebarOpen: (isSidebarOpen: boolean) => void;
 }
 
-const ChatHeader = ({ autoScroll, setAutoScroll }: Scroll) => {
+const ChatHeader = ({
+    autoScroll,
+    setAutoScroll,
+    isSidebarOpen,
+    setIsSidebarOpen,
+}: ChatHeaderProps) => {
     const { selectedUser, setSelectedUser } = useChatStore();
     const { onlineUsers } = useAuthStore();
 
@@ -29,6 +36,14 @@ const ChatHeader = ({ autoScroll, setAutoScroll }: Scroll) => {
         <div className="p-2.5 border-b border-base-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
+                    {/* Toggle Button */}
+                    <button
+                        className="z-10 btn btn-sm btn-ghost"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        <Menu className="w-5 h-5" />
+                    </button>
+
                     {/* Avatar */}
                     <div className="avatar">
                         <div className="size-10 rounded-full relative">
@@ -61,7 +76,10 @@ const ChatHeader = ({ autoScroll, setAutoScroll }: Scroll) => {
                     />
 
                     {/* Close button */}
-                    <button className="cursor-pointer" onClick={() => setSelectedUser(null)}>
+                    <button
+                        className="cursor-pointer"
+                        onClick={() => setSelectedUser(null)}
+                    >
                         <X />
                     </button>
                 </div>

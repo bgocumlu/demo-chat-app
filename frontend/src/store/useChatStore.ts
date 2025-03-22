@@ -25,10 +25,12 @@ interface ChatStore {
     fetchUsers: () => Promise<void>;
     fetchMessages: (userId: string) => Promise<void>;
     sendMessage: (messageData: Message) => Promise<void>;
+    deleteMessage: (messageId: string) => Promise<void>;
     subscribeToMessages: () => void;
     unsubscribeFromMessages: () => void;
     setSelectedUser: (selectedUser: User | null) => void;
     setImageLoading: (isImageLoading: boolean) => void;
+    sortUsers: () => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -51,6 +53,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         } finally {
             set({ isUsersLoading: false });
         }
+
+        get().sortUsers();
     },
 
     fetchMessages: async (userId: string) => {
@@ -93,6 +97,22 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         }
     },
 
+    deleteMessage: async (messageId) => {
+        const { messages } = get();
+
+        try {
+            await axiosInstance.post(`/messages/delete/${messageId}`);
+            set({
+                messages: messages.filter(
+                    (message) => message._id !== messageId
+                ),
+            });
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to delete message");
+        }
+    },
+
     subscribeToMessages: () => {
         const { selectedUser } = get();
         if (!selectedUser) return;
@@ -104,11 +124,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
             set((state) => ({ messages: [...state.messages, newMessage] }));
         });
+
+        // Listen for deleted messages
+        socket?.on("deleteMessage", (deletedMessageId: string) => {
+            const message = get().messages.find(
+                (message) => message._id === deletedMessageId
+            );
+            console.log("Deleted message: ", message);
+            set((state) => ({
+                messages: state.messages.filter(
+                    (message) => message._id !== deletedMessageId
+                ),
+            }));
+        });
     },
 
     unsubscribeFromMessages: () => {
         const socket = useAuthStore.getState().socket;
         socket?.off("newMessage");
+        socket?.off("deleteMessage");
     },
 
     setSelectedUser: (selectedUser) => {
@@ -117,5 +151,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     setImageLoading: (isImageLoading) => {
         set({ isImageLoading: isImageLoading });
+    },
+
+    sortUsers: () => {
+        set((state) => ({
+            users: state.users.sort((a, b) => {
+                if (a.username < b.username) return -1;
+                if (a.username > b.username) return 1;
+                return 0;
+            }),
+        }));
     },
 }));

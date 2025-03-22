@@ -96,6 +96,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     logout: async () => {
         try {
+            if (get().authUser?.isGuest) {
+                get().deleteAccount();
+                return;
+            }
             await axiosInstance.post("auth/logout");
             set({ authUser: null });
             toast.success("Logged out successfully");

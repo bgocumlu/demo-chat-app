@@ -7,10 +7,10 @@ import multer from "multer";
 const upload = multer({
     limits: {
         fileSize: 10 * 1024 * 1024,
-        fieldSize: 10 * 1024 * 1024, 
+        fieldSize: 10 * 1024 * 1024,
     }, // 10MB max file size
 }).fields([
-    { name: "text", maxCount: 1 }, 
+    { name: "text", maxCount: 1 },
     { name: "image", maxCount: 1 },
 ]);
 
@@ -52,10 +52,10 @@ export const sendMessage = async (req, res) => {
         upload(req, res, async (err) => {
             if (err) {
                 return res
-                .status(400)
-                .json({ error: "File upload failed: " + err.message });
+                    .status(400)
+                    .json({ error: "File upload failed: " + err.message });
             }
-            
+
             const { text, image } = req.body;
             const { id: recieverId } = req.params;
             const senderId = req.user._id;
@@ -68,7 +68,7 @@ export const sendMessage = async (req, res) => {
                 res.status(500).json({ message: "Internal server error" });
                 return;
             }
-            
+
             let imageUrl;
 
             if (image) {
@@ -98,6 +98,35 @@ export const sendMessage = async (req, res) => {
             res.status(201).json(newMessage);
             return;
         });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const deleteMessage = async (req, res) => {
+    try {
+        const { id: messageId } = req.params;
+        const message = await Message.findById(messageId);
+
+        if (!message) {
+            res.status(404).json({ message: "Message not found" });
+            return;
+        }
+
+        if (req.user._id.toString != message.senderId.toString) {
+            res.status(403).json({ message: "Unauthorized" });
+            return;
+        }
+
+        await Message.findByIdAndDelete(messageId);
+
+        const recieverSocketId = getReceiverSocketId(message.recieverId);
+        if (recieverSocketId) {
+            io.to(recieverSocketId).emit("deleteMessage", messageId);
+        }
+        
+        res.status(200).json({ message: "Message deleted" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
