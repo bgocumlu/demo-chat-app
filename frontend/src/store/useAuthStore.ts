@@ -19,7 +19,7 @@ interface AuthState {
     signup: (formData: Form) => Promise<void>;
     login: (formData: Form) => Promise<void>;
     logout: () => Promise<void>;
-    deleteAccount: (userId: string) => Promise<void>;
+    deleteAccount: () => Promise<void>;
     updateProfile: (data: unknown) => Promise<void>;
     connectSocket: () => void;
     disconnectSocket: () => void;
@@ -133,11 +133,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         }
     },
 
-    deleteAccount: async (userId: string) => {
-        if (!userId) {
-            toast.error("User ID is required");
-            return;
-        }
+    deleteAccount: async () => {
         try {
             const res = await axiosInstance.post("auth/delete");
 

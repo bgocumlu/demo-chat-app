@@ -12,7 +12,7 @@ const ProfilePage = () => {
     const handleDeleteAccount = () => {
         console.log("User confirmed delete account");
         // Call the delete account function
-        deleteAccount(authUser?._id ?? "");
+        deleteAccount();
         deleteModalRef.current?.close(); // Close the modal programmatically
     }
 
