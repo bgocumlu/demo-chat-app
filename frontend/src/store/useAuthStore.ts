@@ -19,6 +19,7 @@ interface AuthState {
     signup: (formData: Form) => Promise<void>;
     login: (formData: Form) => Promise<void>;
     logout: () => Promise<void>;
+    deleteAccount: (userId: string) => Promise<void>;
     updateProfile: (data: unknown) => Promise<void>;
     connectSocket: () => void;
     disconnectSocket: () => void;
@@ -106,15 +107,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     },
 
     updateProfile: async (data) => {
-        
         const user = get().authUser;
         if (user?.isGuest) {
             toast.error("Guest users cannot update their profile");
             return;
         }
-        
+
         set({ isUpdatingProfile: true });
-        
+
         try {
             const response = await axiosInstance.put(
                 "auth/update-profile",
@@ -130,6 +130,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             toast.error(errorMessage);
         } finally {
             set({ isUpdatingProfile: false });
+        }
+    },
+
+    deleteAccount: async (userId: string) => {
+        if (!userId) {
+            toast.error("User ID is required");
+            return;
+        }
+        try {
+            const res = await axiosInstance.post("auth/delete");
+
+            set({ authUser: null });
+            console.log(res);
+            toast.success("Account deleted successfully");
+            get().disconnectSocket();
+        } catch (error) {
+            console.log(error);
+            toast.error("An error occurred");
         }
     },
 

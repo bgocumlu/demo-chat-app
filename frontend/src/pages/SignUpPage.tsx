@@ -77,7 +77,6 @@ const SignUpPage = () => {
                                     minLength={1}
                                     maxLength={20}
                                     required
-                                    pattern="^[a-zA-Z0-9-_]+$"
                                     title="Username can only contain letters, numbers, underscores, and hyphens. No spaces are allowed. Maximum length is 20 characters."
                                     placeholder="John"
                                     value={formData.username}

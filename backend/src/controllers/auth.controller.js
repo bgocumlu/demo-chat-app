@@ -1,12 +1,8 @@
-import { generateToken } from "../lib/utils.js";
+import { generateToken, isValidUsername } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
-
-function isValidUsername(username) {
-    const regex = /^[a-zA-Z0-9-_]+$/;
-    return regex.test(username);
-}
+import Message from "../models/message.model.js";
 
 export const signup = async (req, res) => {
     const { username, password, isGuest, profilePic } = req.body;
@@ -22,8 +18,7 @@ export const signup = async (req, res) => {
         }
         if (!isGuest && username.startsWith("Guest_")) {
             return res.status(400).json({
-                message:
-                    "Username can not start with Guest_",
+                message: "Username can not start with Guest_",
             });
         }
         if (!isValidUsername(username)) {
@@ -36,11 +31,9 @@ export const signup = async (req, res) => {
         const user = await User.findOne({ username });
         if (user) {
             if (user.isGuest) {
-                return res
-                    .status(400)
-                    .json({
-                        message: "Error creating guest account. Try again",
-                    });
+                return res.status(400).json({
+                    message: "Error creating guest account. Try again",
+                });
             }
             return res.status(400).json({ message: "Username already exists" });
         }
@@ -133,6 +126,29 @@ export const updateProfile = async (req, res) => {
         );
 
         res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+export const deleteProfile = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        await Message.deleteMany({
+            $or: [{ senderId: userId }, { recieverId: userId }],
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        await User.findByIdAndDelete(userId);
+
+        res.cookie("jwt", "", { maxAge: 0 });
+        res.status(200).json({ message: `User deleted: ${user.username}` });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal Server Error" });

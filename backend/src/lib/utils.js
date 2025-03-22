@@ -14,3 +14,8 @@ export const generateToken = (userId, res) => {
 
     return token;
 };
+
+export function isValidUsername(username) {
+    const regex = /^[a-zA-Z0-9-_]+$/;
+    return regex.test(username);
+}

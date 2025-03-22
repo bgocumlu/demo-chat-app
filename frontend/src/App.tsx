@@ -12,8 +12,6 @@ import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 
-// TODO: hesap silme, mesaj silme/düzenleme, group chat
-
 function App() {
     const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 

@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const { authUser, logout } = useAuthStore();
-    const modalRef = useRef<HTMLDialogElement | null>(null);
+    const logoutModalRef = useRef<HTMLDialogElement | null>(null);
 
     const handleLogout = () => {
         console.log("User confirmed logout");
         logout(); // Call the logout function
-        modalRef.current?.close(); // Close the modal programmatically
+        logoutModalRef.current?.close(); // Close the modal programmatically
     };
 
     return (
@@ -58,7 +58,7 @@ const Navbar = () => {
                                     <button
                                         className="flex gap-2 items-center cursor-pointer"
                                         onClick={() =>
-                                            modalRef.current?.showModal()
+                                            logoutModalRef.current?.showModal()
                                         }
                                     >
                                         <LogOut className="size-5" />
@@ -74,7 +74,7 @@ const Navbar = () => {
             </header>
 
             {/* Logout Confirmation Modal */}
-            <dialog id="logout_modal" ref={modalRef} className="modal">
+            <dialog id="logout_modal" ref={logoutModalRef} className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">
                         {authUser?.isGuest
@@ -92,7 +92,7 @@ const Navbar = () => {
                         </button>
                         <button
                             className="btn"
-                            onClick={() => modalRef.current?.close()}
+                            onClick={() => logoutModalRef.current?.close()}
                         >
                             Cancel
                         </button>
