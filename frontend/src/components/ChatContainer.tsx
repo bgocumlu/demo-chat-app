@@ -29,7 +29,7 @@ const ChatContainer = ({
     const messageEndRef = useRef<HTMLDivElement | null>(null);
     const [autoScroll, setAutoScroll] = useState(true);
 
-    // TODO: Implement message editing
+    // TODO: Implement message editing, fix skeletons, add new message indicator
     const handleDeleteMessage = (
         event: React.MouseEvent<HTMLButtonElement>
     ): void => {
