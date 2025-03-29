@@ -143,6 +143,7 @@ const ChatContainer = ({
                                         src={message.image}
                                         alt="Attachment"
                                         className="sm:max-w-[200px] rounded-md mb-2"
+                                        style={{ minWidth: "100px", maxWidth: "100%" }} // Ensure a minimum width
                                         data-image-index={index}
                                         onLoad={handleImageLoad}
                                     />
