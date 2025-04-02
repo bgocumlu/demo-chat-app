@@ -28,7 +28,7 @@ const ChatContainer = ({
     const { authUser } = useAuthStore();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
     const [autoScroll, setAutoScroll] = useState(true);
-    const [showDeleteButton, setShowDeleteButton] = useState(true);
+    const [showDeleteButton, setShowDeleteButton] = useState(false);
 
     // TODO: Implement message editing, fix skeletons, add new message indicator
     const handleDeleteMessage = (
@@ -152,6 +152,7 @@ const ChatContainer = ({
                                         src={message.image}
                                         alt="Attachment"
                                         className="sm:max-w-[200px] max-w-full rounded-md mb-2"
+                                        style={{ minWidth: "100px", maxWidth: "100%" }}
                                         data-image-index={index}
                                         onLoad={handleImageLoad}
                                     />
