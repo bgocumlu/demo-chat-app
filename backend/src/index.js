@@ -8,11 +8,17 @@ import cors from "cors";
 import { io, app, server } from "./lib/socket.js";
 
 import path from "path";
+import job from "./lib/cron.js";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
 const __dirname = path.resolve();
+
+if (process.env.API_URL) {
+    console.log(`API URL: ${process.env.API_URL}`);
+    job.start();
+}
 
 app.use(
     cors({
