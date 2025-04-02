@@ -28,6 +28,7 @@ const ChatContainer = ({
     const { authUser } = useAuthStore();
     const messageEndRef = useRef<HTMLDivElement | null>(null);
     const [autoScroll, setAutoScroll] = useState(true);
+    const [showDeleteButton, setShowDeleteButton] = useState(true);
 
     // TODO: Implement message editing, fix skeletons, add new message indicator
     const handleDeleteMessage = (
@@ -36,8 +37,12 @@ const ChatContainer = ({
         const messageId = event.currentTarget.dataset.messageId;
         deleteMessage(messageId ?? "");
         console.log(`Delete message with ID: ${messageId}`);
-        // Add your delete logic here
+        setShowDeleteButton(false);
     };
+
+    function toggleDeleteButton() {
+        setShowDeleteButton(!showDeleteButton);
+    }
 
     const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
         console.log(event.currentTarget.dataset.imageIndex);
@@ -137,20 +142,27 @@ const ChatContainer = ({
                                         ? "chat-bubble-primary"
                                         : ""
                                 } group`}
+                                onClick={
+                                    message.senderId ===
+                                    authUser?._id ? toggleDeleteButton : undefined
+                                }
                             >
                                 {message.image && (
                                     <img
                                         src={message.image}
                                         alt="Attachment"
-                                        className="sm:max-w-[200px] rounded-md mb-2"
-                                        style={{ minWidth: "100px", maxWidth: "100%" }} // Ensure a minimum width
+                                        className="sm:max-w-[200px] max-w-full rounded-md mb-2"
                                         data-image-index={index}
                                         onLoad={handleImageLoad}
                                     />
                                 )}
                                 {message.senderId === authUser?._id && (
                                     <button
-                                        className="absolute -top-0.5 -left-0.5 text-xs text-error bg-base-100 rounded-full p-0.5 hidden group-hover:block"
+                                        className={`absolute -top-0.5 -left-0.5 text-xs text-error bg-base-100 rounded-full p-0.5  ${
+                                            showDeleteButton
+                                                ? "block"
+                                                : "hidden"
+                                        }  group-hover:block`}
                                         data-message-id={message._id} // Store the message ID in a data attribute
                                         onClick={handleDeleteMessage}
                                     >

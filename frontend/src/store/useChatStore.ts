@@ -66,6 +66,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             toast.error("Failed to fetch users");
         } finally {
             set({ isUsersLoading: false });
+            console.log("Users fetched");
         }
     },
 
