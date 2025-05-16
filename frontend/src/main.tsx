@@ -11,3 +11,5 @@ createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
     </StrictMode>
 );
+
+// Service worker registration is handled in index.html for PWA support.
