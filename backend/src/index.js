@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 
 if (process.env.API_URL) {
     console.log(`API URL: ${process.env.API_URL}`);
-    job.start();
+    // job.start();
 }
 
 app.use(
